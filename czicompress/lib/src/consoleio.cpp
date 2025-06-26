@@ -70,9 +70,10 @@ bool ConsoleIo::IsStdOutATerminal() const
 {
 #if CZICOMPRESS_WIN32_ENVIRONMENT
   return this->console_handle_ != INVALID_HANDLE_VALUE;
-#endif
-#if CZICOMPRESS_UNIX_ENVIRONMENT
+#elif CZICOMPRESS_UNIX_ENVIRONMENT
   return this->is_terminal_output_;
+#else
+  return false;  // Unsupported environment
 #endif
 }
 
@@ -83,8 +84,7 @@ void ConsoleIo::SetColor(ConsoleColor foreground, ConsoleColor background)
   {
     SetConsoleTextAttribute(this->console_handle_, this->GetColorAttribute(foreground, background));
   }
-#endif
-#if CZICOMPRESS_UNIX_ENVIRONMENT
+#elif CZICOMPRESS_UNIX_ENVIRONMENT
   if (this->is_terminal_output_)
   {
     this->SetTextColorAnsi(foreground, background);
